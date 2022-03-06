@@ -12,12 +12,13 @@ if getgenv().library then
 	getgenv().library:Unload()
 end
 
+local data = {...};data=data[1]
 -- [UI Library Settings]
 local library = {
 	tabs = {},
 	draggable = true,
 	flags = {},
-	title = "weed.deals | lucious#9999",
+	title = "Axusware",
 	open = false,
 	mousestate = inputService.MouseIconEnabled,
 	popup = nil,
@@ -27,8 +28,8 @@ local library = {
 	notifications = {},
 	tabSize = 0,
 	theme = {},
-	foldername = "weed_configs",
-	fileext = ".txt"
+	foldername = "Axus",
+	fileext = "ax"
 }
 
 getgenv().library = library
@@ -227,7 +228,8 @@ local function createLabel(option, parent)
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextYAlignment = Enum.TextYAlignment.Top,
 		TextWrapped = true,
-		Parent = parent
+		Parent = parent,
+		Name = option.text
 	})
 	setmetatable(option, {
 		__newindex = function(t, i, v)
@@ -246,7 +248,8 @@ local function createDivider(option, parent)
 		LayoutOrder = option.position,
 		Size = UDim2.new(1, 0, 0, 18),
 		BackgroundTransparency = 1,
-		Parent = parent
+		Parent = parent,
+		Name = option.text
 	})
 	library:Create("Frame", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -291,7 +294,8 @@ local function createToggle(option, parent)
 		LayoutOrder = option.position,
 		Size = UDim2.new(1, 0, 0, 20),
 		BackgroundTransparency = 1,
-		Parent = parent
+		Parent = parent,
+		Name = option.flag
 	})
 	local tickbox
 	local tickboxOverlay
@@ -473,7 +477,8 @@ local function createButton(option, parent)
 		LayoutOrder = option.position,
 		Size = UDim2.new(1, 0, 0, 26),
 		BackgroundTransparency = 1,
-		Parent = parent
+		Parent = parent,
+		Name = option.flag
 	})
 	option.title = library:Create("TextLabel", {
 		AnchorPoint = Vector2.new(0.5, 1),
@@ -569,7 +574,8 @@ local function createBind(option, parent)
 			Font = Enum.Font.Code,
 			TextColor3 = Color3.fromRGB(210, 210, 210),
 			TextXAlignment = Enum.TextXAlignment.Left,
-			Parent = option.main
+			Parent = option.main,
+			Name = option.flag
 		})
 	end
 
@@ -675,7 +681,8 @@ local function createSlider(option, parent)
 			LayoutOrder = option.position,
 			Size = UDim2.new(1, 0, 0, option.textpos and 24 or 40),
 			BackgroundTransparency = 1,
-			Parent = parent
+			Parent = parent,
+			Name = option.flag
 		})
 	end
 	option.slider = library:Create("Frame", {
@@ -835,7 +842,8 @@ local function createList(option, parent)
 			LayoutOrder = option.position,
 			Size = UDim2.new(1, 0, 0, option.text == "nil" and 30 or 48),
 			BackgroundTransparency = 1,
-			Parent = parent
+			Parent = parent,
+			Name = option.flag
 		})
 		if option.text ~= "nil" then
 			library:Create("TextLabel", {
@@ -1152,7 +1160,8 @@ local function createBox(option, parent)
 		LayoutOrder = option.position,
 		Size = UDim2.new(1, 0, 0, option.text == "nil" and 28 or 44),
 		BackgroundTransparency = 1,
-		Parent = parent
+		Parent = parent,
+		Name = option.flag
 	})
 	if option.text ~= "nil" then
 		option.title = library:Create("TextLabel", {
@@ -1276,7 +1285,8 @@ local function createColorPickerWindow(option)
 		BorderColor3 = Color3.new(),
 		AutoButtonColor = false,
 		Visible = false,
-		Parent = library.base
+		Parent = library.base,
+		Name = option.flag
 	})
 	library:Create("ImageLabel", {
 		ZIndex = 4,
@@ -1465,7 +1475,8 @@ local function createColor(option, parent)
 			LayoutOrder = option.position,
 			Size = UDim2.new(1, 0, 0, 20),
 			BackgroundTransparency = 1,
-			Parent = parent
+			Parent = parent,
+			Name = option.flag
 		})
 		option.title = library:Create("TextLabel", {
 			Position = UDim2.new(0, 6, 0, 0),
@@ -2337,7 +2348,10 @@ function library:Init()
 	elseif syn then
 		syn.protect_gui(self.base)
 		self.base.Parent = game:GetService"CoreGui"
+        else
+                self.base.Parent = game:GetService"CoreGui"
 	end
+	getgenv().base = self.base
 	self.main = self:Create("ImageButton", {
 		AutoButtonColor = false,
 		Position = UDim2.new(0, 100, 0, 46),
@@ -2479,22 +2493,6 @@ function library:Init()
 			column.main.Visible = true
 		end
 	end
-	spawn(function()
-		while library do
-			wait(1)
-			local Configs = self:GetConfigs()
-			for _, config in next, Configs do
-				if not table.find(self.options["Config List"].values, config) then
-					self.options["Config List"]:AddValue(config)
-				end
-			end
-			for i, config in next, self.options["Config List"].values do
-				if not table.find(Configs, config) then
-					self.options["Config List"]:RemoveValue(config)
-				end
-			end
-		end
-	end)
 	for _, tab in next, self.tabs do
 		if tab.canInit then
 			tab:Init()
@@ -2564,3 +2562,77 @@ function library:Init()
 		end)
 	end
 end
+
+local SettingsTab = library:AddTab("Settings"); 
+local SettingsColumn = SettingsTab:AddColumn(); 
+local SettingsColumn2 = SettingsTab:AddColumn(); 
+local SettingSection = SettingsColumn:AddSection("Menu"); 
+local Warning = library:AddWarning({type = "confirm"});
+
+SettingSection:AddBind({text = "Open / Close", flag = "UI Toggle", nomouse = true, key = "RightShift", callback = function()
+    library:Close();
+end});
+
+SettingSection:AddColor({text = "Accent Color", flag = "Menu Accent Color", color = Color3.fromRGB(59, 59, 255), callback = function(color)
+    if library.currentTab then
+        library.currentTab.button.TextColor3 = color;
+    end
+    for i,v in pairs(library.theme) do
+        v[(v.ClassName == "TextLabel" and "TextColor3") or (v.ClassName == "ImageLabel" and "ImageColor3") or "BackgroundColor3"] = color;
+    end
+end});
+
+
+-- [Background List]
+local backgroundlist = {
+    Floral = "rbxassetid://5553946656",
+    Flowers = "rbxassetid://6071575925",
+    Circles = "rbxassetid://6071579801",
+    Hearts = "rbxassetid://6073763717"
+};
+
+-- [Background List]
+local back = SettingSection:AddList({text = "Background", max = 4, flag = "background", values = {"Floral", "Flowers", "Circles", "Hearts"}, value = "Floral", callback = function(v)
+    if library.main then
+        library.main.Image = backgroundlist[v];
+    end
+end});
+
+-- [Background Color Picker]
+back:AddColor({flag = "backgroundcolor", color = Color3.new(), callback = function(color)
+    if library.main then
+        library.main.ImageColor3 = color;
+    end
+end, trans = 1, calltrans = function(trans)
+    if library.main then
+        library.main.ImageTransparency = 1 - trans;
+    end
+end});
+
+-- [Tile Size Slider]
+SettingSection:AddSlider({text = "Tile Size", min = 50, max = 500, value = 125, callback = function(size)
+    if library.main then
+        library.main.TileSize = UDim2.new(0, size, 0, size);
+    end
+end});
+
+-- [Discord Button]
+SettingSection:AddButton({text = "Discord", callback = function()
+    syn.request({
+		Url = "http://127.0.0.1:6463/rpc?v=1",
+		Method = "POST",
+		Headers = {
+			["Content-Type"] = "application/json",
+			["origin"] = "https://discord.com",
+		},
+		Body = game:GetService("HttpService"):JSONEncode(
+            {
+			args = {
+				code = "TEfxSz8Tyw",
+			},
+			cmd = "INVITE_BROWSER",
+			nonce = "0"
+		}
+        )
+	})
+end});
