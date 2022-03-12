@@ -29,7 +29,7 @@ local library = {
 	tabSize = 0,
 	theme = {},
 	foldername = "Axus",
-	fileext = "ax"
+	fileext = ".axs"
 }
 
 getgenv().library = library
@@ -2616,23 +2616,4 @@ SettingSection:AddSlider({text = "Tile Size", min = 50, max = 500, value = 125, 
     end
 end});
 
--- [Discord Button]
-SettingSection:AddButton({text = "Discord", callback = function()
-    syn.request({
-		Url = "http://127.0.0.1:6463/rpc?v=1",
-		Method = "POST",
-		Headers = {
-			["Content-Type"] = "application/json",
-			["origin"] = "https://discord.com",
-		},
-		Body = game:GetService("HttpService"):JSONEncode(
-            {
-			args = {
-				code = "TEfxSz8Tyw",
-			},
-			cmd = "INVITE_BROWSER",
-			nonce = "0"
-		}
-        )
-	})
-end});
+
