@@ -147,7 +147,7 @@ function lib:CreateNotify(settings,callback)
     Progress.Size = UDim2.new(0, 0, 1, 0)
     Progress.ImageTransparency = 1
     Progress.Image = "rbxassetid://3570695787"
-    Progress.ImageColor3 = Color3.fromRGB(85, 0, 182)
+    Progress.ImageColor3 = Color3.fromRGB(25, 25, 25)
     Progress.ScaleType = Enum.ScaleType.Slice
     Progress.SliceCenter = Rect.new(100, 100, 100, 100)
     Progress.SliceScale = 0.120
