@@ -5,8 +5,8 @@ local startUpArgs = getgenv().startUpArgs or { 'universal', 'public' }
     --made by Portal#4849
     --LEAKED BY FIJI https://v3rmillion.net/showthread.php?tid=1208282
 --]]
-local drawing  = loadstring(game:HttpGet'https://github.com/ghastlytim/safw/blob/main/exe.lua')()
-local tween = loadstring(game:HttpGet'https://raw.githubusercontent.com/ghastlytim/safw/main/tweencust.lua')()
+local drawing  = loadstring(game:HttpGet('https://github.com/ghastlytim/safw/blob/main/exe.lua'))()
+local tween = loadstring(game:HttpGet('https://raw.githubusercontent.com/ghastlytim/safw/main/tweencust.lua'))()
 local services = setmetatable({}, {
     __index = function(_, k)
         k = (k == "InputService" and "UserInputService") or k
